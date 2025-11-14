@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ESP32 LED Control</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 60px;
+        }
+        button {
+            padding: 15px 40px;
+            font-size: 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+<body>
+
+    <h1>ESP32 LED Control Panel</h1>
+
+    <button onclick="setLED('on')" style="background: #4CAF50; color:white;">LED ON</button>
+    <button onclick="setLED('off')" style="background: #F44336; color:white;">LED OFF</button>
+
+    <div id="status">LED Status: Unknown</div>
+
+<script>
+    // <<--- مهم: بعد از دیپلوی، این URL را با آدرس API خودت عوض کن
+    const apiUrl = "/api/leds";
+
+    function setLED(state) {
+        fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ state: state })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("status").innerText = "LED Status: " + data.led;
+        })
+        .catch(() => {
+            alert("Error sending request!");
+        });
+    }
+</script>
+
+</body>
+</html>
